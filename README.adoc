@@ -1,3 +1,79 @@
 = Kubernetes demo
 
+These scripts can be used for quick bootstrapping of Kubernetes and Etcd cluster. Predefined values are prepared for running on localhost but it can be easily changes to multi node scenario.
+
+
+== Configuration variables
+
+[cols="3*",options="header"]
+|====
+|Name
+|Default
+|Description
+
+| `ETCD_IMAGE`
+| `quay.io/coreos/etcd:v2.2.0`
+| etcd is running from this image
+
+| `ETCD_NAME`
+| `0`
+| cluster name of etcd server
+
+| `ETCD_LISTEN_IP`
+| `127.0.0.1`
+| etcd listen on this address
+
+| `ETCD_ADVERTISE_IP`
+| `127.0.0.1`
+| address advetised to etcd clients
+
+| `MASTER`
+| `127.0.0.1`
+| address of Kubernetes master (API server)
+
+| `NODE_IP`
+| `127.0.0.1`
+|
+
+| `SERVICERANGE`
+| `172.18.0.0/24`
+| IP range used for Kubernetes services
+
+| `IMAGE`
+| `gcr.io/google_containers/hyperkube-amd64:v1.2.3`
+| Kubernetes components are using this image
+
+| `ETCD_SERVERS`
+| `http://127.0.0.1:4001`
+| Kubernetes uses this etcd server
+
+|====
+
+== Usage
+
+. Start etcd server
+
+  ./etcd.sh
+
+. (Optional) Test etcd server
+
+  etcdctl set /me $(whoami) && etcdctl get /me
+
+. Start Kubernetes services
+
+.. API server
+
+  ./kubernetes.sh apiserver
+
+.. Controller Manager
+
+  ./kubernetes.sh controller-manager
+
+.. Scheduler
+
+  ./kubernetes.sh scheduler
+
+.. Proxy
+
+  ./kubernetes.sh proxy
 
