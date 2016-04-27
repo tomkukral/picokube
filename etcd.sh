@@ -4,7 +4,7 @@
 # https://coreos.com/etcd/docs/latest/docker_guide.html
 
 ETCD_IMAGE="quay.io/coreos/etcd:v2.2.0"
-ETCD_NAME="0 "
+ETCD_NAME="0"
 ETCD_LISTEN_IP="0.0.0.0"
 ETCD_ADVERTISE_IP="127.0.0.1"
 
