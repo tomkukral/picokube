@@ -30,5 +30,5 @@ docker run \
 		--listen-peer-urls http://${ETCD_LISTEN_IP}:2380 \
 		--initial-advertise-peer-urls http://${ETCD_ADVERTISE_IP}:2380 \
 		--initial-cluster-token etcd-cluster-1 \
-		--initial-cluster 0=http://${ETCD_ADVERTISE_IP}:2380 \
+		--initial-cluster ${ETCD_NAME}=http://${ETCD_ADVERTISE_IP}:2380 \
 		--initial-cluster-state new
