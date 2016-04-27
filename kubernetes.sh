@@ -1,16 +1,15 @@
 #!/bin/bash
 
 # config
-MASTER="172.17.0.1"
-NODEIP="{{ansible_dbr0.ipv4.address}}"
+MASTER="127.0.0.1"
+NODEIP="127.0.0.1"
 SERVICERANGE="172.18.0.0/24"
 
 NAME="k8s.$1"
-IMAGE="tomkukral/gentoo-hyperkube:1.0.3-c"
+IMAGE="gcr.io/google_containers/hyperkube-amd64:v1.2.3"
 ETCD_SERVERS="http://127.0.0.1:4001"
 
-
-# functions
+## functions
 remove_container () {
 	if docker ps -a | grep "$NAME" > /dev/null; then
 		docker stop "$NAME"
@@ -19,6 +18,10 @@ remove_container () {
 }
 
 case "$1" in
+"pull-only")
+	docker pull "$IMAGE"
+	;;
+
 "apiserver")
 	echo "preparing to run container $NAME"
 
@@ -80,12 +83,7 @@ case "$1" in
 		--restart always \
 		--net host \
 		--privileged \
-		--volume /lib/modules/:/lib/modules/ \
 		--volume /var/run/docker.sock:/var/run/docker.sock \
-		--volume /etc/ceph/:/etc/ceph/ \
-		--volume /var/lib/ceph/:/var/lib/ceph/ \
-		--volume /dev/:/dev/ \
-		--volume /sys/:/sys/ \
 		$IMAGE /hyperkube kubelet \
 			--api_servers=http://$MASTER:8080 \
 			--address=$NODEIP \
@@ -121,6 +119,6 @@ case "$1" in
 	;;
 *)
 	echo "unknown component $1"
-	echo "available: apiserver, controller-manager, scheduler, kubelet, proxy"
+	echo "available: apiserver, controller-manager, scheduler, kubelet, proxy, pull-only"
 	;;
 esac
