@@ -9,6 +9,8 @@ NAME="k8s.$1"
 IMAGE="gcr.io/google_containers/hyperkube-amd64:v1.2.3"
 ETCD_SERVERS="http://127.0.0.1:4001"
 
+RESTART="no"
+
 ## functions
 remove_container () {
 	if docker ps -a | grep "$NAME" > /dev/null; then
@@ -30,7 +32,7 @@ case "$1" in
 	docker run \
 		--name "$NAME" \
 		--detach \
-		--restart always \
+		--restart $RESTART \
 		--net host \
 		$IMAGE /hyperkube apiserver \
 			--insecure-bind-address=$MASTER \
@@ -50,7 +52,7 @@ case "$1" in
 	docker run \
 		--name "$NAME" \
 		--detach \
-		--restart always \
+		--restart $RESTART \
 		--net host \
 		$IMAGE /hyperkube controller-manager \
 			--master=$MASTER:8080 \
@@ -65,7 +67,7 @@ case "$1" in
 	docker run \
 		--name "$NAME" \
 		--detach \
-		--restart always \
+		--restart $RESTART \
 		--net host \
 		$IMAGE /hyperkube scheduler \
 			--master=$MASTER:8080 \
@@ -80,7 +82,7 @@ case "$1" in
 	docker run \
 		--name "$NAME" \
 		--detach \
-		--restart always \
+		--restart $RESTART \
 		--net host \
 		--privileged \
 		--volume /var/run/docker.sock:/var/run/docker.sock \
@@ -109,7 +111,7 @@ case "$1" in
 	docker run \
 		--name "$NAME" \
 		--detach \
-		--restart always \
+		--restart $RESTART \
 		--net host \
 		--privileged \
 		$IMAGE /hyperkube proxy \

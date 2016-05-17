@@ -47,9 +47,19 @@ These scripts can be used for quick bootstrapping of Kubernetes and Etcd cluster
 | `http://127.0.0.1:4001`
 | Kubernetes uses this etcd server
 
+| `RESTART`
+| `no`
+| Restart policy for Kubernetes containers
+
+
 |====
 
 == Usage
+
+. Prepare before demo (pull images)
+
+  ./etcd.sh pull-only
+  ./kubernetes.sh pull-only 
 
 . Start etcd server
 
@@ -57,7 +67,7 @@ These scripts can be used for quick bootstrapping of Kubernetes and Etcd cluster
 
 . (Optional) Test etcd server
 
-  etcdctl set /me $(whoami) && etcdctl get /me
+  ./bin/etcdctl set /me $(whoami) && ./bin/etcdctl get /me
 
 . Start Kubernetes services
 
@@ -77,3 +87,10 @@ These scripts can be used for quick bootstrapping of Kubernetes and Etcd cluster
 
   ./kubernetes.sh proxy
 
+.. Kubelet
+
+  ./kubernetes.sh kubelet
+ 
+. Configure Kubernetes
+
+.. gg
