@@ -8,6 +8,11 @@ ETCD_NAME="0"
 ETCD_LISTEN_IP="0.0.0.0"
 ETCD_ADVERTISE_IP="127.0.0.1"
 
+if [ "$1" == "pull-only" ]; then
+	docker pull "$ETCD_IMAGE"
+	exit 0
+fi
+
 # create data container
 docker ps -a | grep data_etcd || docker create -v /var/etcd/data --name data_etcd $ETCD_IMAGE /bin/true
 
