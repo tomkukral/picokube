@@ -6,6 +6,7 @@
         - vim
         - docker
         - git
+        - tmux
 
     - name: docker storage config
       template: src=docker-storage-setup dest=/etc/sysconfig/
