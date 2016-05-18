@@ -8,7 +8,8 @@ done
 docker stop etcd
 docker rm data_etcd
 
-sleep 1
+echo "Sleep before start"
+sleep 3
 
 ./etcd.sh
 
