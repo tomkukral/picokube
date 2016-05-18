@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for i in {kubelet,controller-manager,scheduler,apiserver}; do
+for i in {kubelet,proxy,controller-manager,scheduler,apiserver}; do
 	docker stop k8s.$i
 	docker rm k8s.$i
 done
@@ -12,7 +12,7 @@ sleep 1
 
 ./etcd.sh
 
-for i in {apiserver,controller-manager,scheduler,kubelet}; do
+for i in {apiserver,controller-manager,scheduler,kubelet,proxy}; do
 	./kubernetes.sh $i
 done
 
