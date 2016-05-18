@@ -19,3 +19,4 @@ done
 sleep 2
 
 ./bin/kubectl create -f conf/nginx-rc.yml
+./bin/kubectl create -f conf/nginx-svc.yml
