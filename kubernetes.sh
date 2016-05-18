@@ -6,7 +6,7 @@ NODEIP="127.0.0.1"
 SERVICERANGE="172.18.0.0/24"
 
 NAME="k8s.$1"
-IMAGE="gcr.io/google_containers/hyperkube-amd64:v1.2.3"
+IMAGE="gcr.io/google_containers/hyperkube-amd64:v1.2.4"
 ETCD_SERVERS="http://127.0.0.1:4001"
 
 RESTART="no"
@@ -85,7 +85,10 @@ case "$1" in
 		--restart $RESTART \
 		--net host \
 		--privileged \
-		--volume /var/run/docker.sock:/var/run/docker.sock \
+    		--volume /var/run:/var/run:rw \
+		--volume /var/lib/docker:/var/lib/docker:rw \
+		--volume /var/lib/kubelet:/var/lib/kubelet:rw \
+    		--volume /sys:/sys:ro \
 		$IMAGE /hyperkube kubelet \
 			--api_servers=http://$MASTER:8080 \
 			--address=$NODEIP \
