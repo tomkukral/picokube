@@ -91,6 +91,17 @@ These scripts can be used for quick bootstrapping of Kubernetes and Etcd cluster
 
   ./kubernetes.sh kubelet
  
-. Configure Kubernetes
+. Create sample app in Kubernetes 
 
-.. gg
+.. Create replication controller 
+
+  ./bin/kubectl create -f conf/nginx-rc.yml
+
+.. Create service
+
+  ./bin/kubectl create -f conf/nginx-svc.yml
+
+. Enjoy
+
+image::bin/cat.gif[align="center"]
+
