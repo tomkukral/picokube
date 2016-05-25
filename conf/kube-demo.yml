@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: kube-demo
+spec:
+  replicas: 1
+  selector:
+    app: kube-demo
+  template:
+    metadata:
+      name: kube-demo
+      labels:
+        app: kube-demo
+    spec:
+      containers:
+      - name: kube-demo
+        image: tomkukral/kube-demo
+        ports:
+        - containerPort: 80
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: kube-demo-svc
+spec:
+  selector: 
+    app: kube-demo
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
