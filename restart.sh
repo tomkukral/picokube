@@ -6,6 +6,7 @@ for i in {kubelet,proxy,controller-manager,scheduler,apiserver}; do
 done
 
 docker stop etcd
+docker rm etcd
 docker rm data_etcd
 
 echo "Sleep before start"
