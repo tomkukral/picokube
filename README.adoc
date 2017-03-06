@@ -1,6 +1,6 @@
 = Kubernetes demo
 
-These scripts can be used for quick bootstrapping of Kubernetes and Etcd cluster. Predefined values are prepared for running on localhost but it can be easily changes to multi node scenario.
+These scripts can be used for quick bootstrapping of Kubernetes and Etcd cluster. Predefined values are prepared for running on localhost but it can be easily changed to multi node scenario.
 
 
 == Configuration variables
@@ -12,7 +12,7 @@ These scripts can be used for quick bootstrapping of Kubernetes and Etcd cluster
 |Description
 
 | `ETCD_IMAGE`
-| `quay.io/coreos/etcd:v2.2.0`
+| `quay.io/coreos/etcd:v3.1.2`
 | etcd is running from this image
 
 | `ETCD_NAME`
@@ -40,7 +40,7 @@ These scripts can be used for quick bootstrapping of Kubernetes and Etcd cluster
 | IP range used for Kubernetes services
 
 | `IMAGE`
-| `gcr.io/google_containers/hyperkube-amd64:v1.2.3`
+| `gcr.io/google_containers/hyperkube-amd64:v1.5.2`
 | Kubernetes components are using this image
 
 | `ETCD_SERVERS`
@@ -59,7 +59,14 @@ These scripts can be used for quick bootstrapping of Kubernetes and Etcd cluster
 . Prepare before demo (pull images)
 
   ./etcd.sh pull-only
-  ./kubernetes.sh pull-only 
+  ./kubernetes.sh pull-only
+
+. Get binaries (optional). Needed only for `kubelet-bare` and testing `etcdctl`.
+
+  ./etcd.sh get-binary
+  ./kubernetes.sh get-binary
+
+  It will copy `etcd`, `etcdctl` and `hyperkube` to `./bin/` directory. Make sure this directory is writable via docker volume mount. You will probably need to run (as root) something like `chcon -Rvt svirt_sandbox_file_t ./bin` if you are using SELinux.
 
 . Start etcd server
 
@@ -89,19 +96,27 @@ These scripts can be used for quick bootstrapping of Kubernetes and Etcd cluster
 
 .. Kubelet
 
+Kubelet can be launched in container but this approach is highly discouraged since it is experimental and may break anytime. It is recommended to use kubelet-bare but be aware this wrapper runs binary on your system (not in container!). It is required to run kubelet-bare are **root**.
+
   ./kubernetes.sh kubelet
- 
-. Create sample app in Kubernetes 
 
-.. Create replication controller 
+or
 
-  ./bin/kubectl create -f conf/nginx-rc.yml
+  ./kubernetes.sh kubelet-bare NODE_IP
+
+Please be aware `kubelet-bare` will not fork into background and you should dedicate new terminal windows for it. Substitute `NODE_IP` with your IP address.
+
+. Create sample app in Kubernetes
 
 .. Create service
 
-  ./bin/kubectl create -f conf/nginx-svc.yml
+  ./bin/kubectl apply -f examples/nginx/nginx-svc.yml
+
+.. Create nginx deployment
+
+  ./bin/kubectl apply -f examples/nginx/nginx-deploy.yml
+
 
 . Enjoy
 
-image::bin/cat.gif[align="center"]
-
+image::images/cat.gif[align="center"]

@@ -6,7 +6,7 @@ NODEIP="127.0.0.1"
 SERVICERANGE="172.18.0.0/24"
 
 NAME="k8s.$1"
-IMAGE="gcr.io/google_containers/hyperkube-amd64:v1.2.4"
+IMAGE="gcr.io/google_containers/hyperkube-amd64:v1.5.2"
 ETCD_SERVERS="http://127.0.0.1:4001"
 
 RESTART="no"
@@ -22,6 +22,18 @@ remove_container () {
 case "$1" in
 "pull-only")
 	docker pull "$IMAGE"
+	;;
+
+"get-binary")
+	[ ! -d bin ] && mkdir bin
+
+	docker run --rm -ti \
+		-v $PWD/bin/:/tmp/bin/ \
+		--entrypoint cp $IMAGE \
+		-- /hyperkube /tmp/bin/
+
+	./bin/hyperkube --version
+	ln -vs hyperkube ./bin/kubectl
 	;;
 
 "apiserver")
@@ -41,6 +53,7 @@ case "$1" in
 			--secure-port=0 \
 			--etcd-servers=$ETCD_SERVERS \
 			--service-cluster-ip-range=$SERVICERANGE \
+			--admission-control=AlwaysAdmit,ServiceAccount \
 			--v=2
 	;;
 
@@ -77,6 +90,8 @@ case "$1" in
 "kubelet")
 	echo "preparing to run container $NAME"
 
+	echo "WARNING: kubelet in container is very experimental as will probable fail. Use kubelet-bare to get working enviroment."
+
 	remove_container "$NAME"
 
 	docker run \
@@ -93,15 +108,25 @@ case "$1" in
 			--api_servers=http://$MASTER:8080 \
 			--address=$NODEIP \
 			--enable-server \
-			--v=2
+			--v=2 \
+			--node-ip 127.0.0.1
 	;;
 
 "kubelet-bare")
 	echo "preparing to run bare $NAME"
 
-	hyperkube kubelet \
+	if [ ! -x "./bin/hyperkube" ]; then
+		echo "./bin/hyperkube is missing or not executable"
+		echo "Please run ./kubernetes.sh get-binary because hyperkube binary is required to run kubelet-bare"
+		exit 1
+	fi
+
+	NODE_IP="$2"
+
+	./bin/hyperkube kubelet \
 			--api_servers=http://$MASTER:8080 \
 			--address=0.0.0.0 \
+			--node-ip $NODE_IP \
 			--enable-server \
 			--v=2
 	;;
@@ -124,6 +149,6 @@ case "$1" in
 	;;
 *)
 	echo "unknown component $1"
-	echo "available: apiserver, controller-manager, scheduler, kubelet, proxy, pull-only"
+	echo "available: apiserver, controller-manager, scheduler, kubelet, proxy, pull-only, get-binary"
 	;;
 esac
