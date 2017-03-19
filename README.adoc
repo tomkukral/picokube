@@ -66,7 +66,7 @@ These scripts can be used for quick bootstrapping of Kubernetes and Etcd cluster
   ./etcd.sh get-binary
   ./kubernetes.sh get-binary
 
-  It will copy `etcd`, `etcdctl` and `hyperkube` to `./bin/` directory. Make sure this directory is writable via docker volume mount. You will probably need to run (as root) something like `chcon -Rvt svirt_sandbox_file_t ./bin` if you are using SELinux.
+It will copy `etcd`, `etcdctl` and `hyperkube` to `./bin/` directory. Make sure this directory is writable via docker volume mount. You will probably need to run (as root) something like `chcon -Rvt svirt_sandbox_file_t ./bin` if you are using SELinux.
 
 . Start etcd server
 
