@@ -53,7 +53,6 @@ case "$1" in
 			--secure-port=0 \
 			--etcd-servers=$ETCD_SERVERS \
 			--service-cluster-ip-range=$SERVICERANGE \
-			--admission-control=AlwaysAdmit,ServiceAccount \
 			--v=2
 	;;
 
