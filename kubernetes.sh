@@ -6,7 +6,7 @@ NODEIP="127.0.0.1"
 SERVICERANGE="172.18.0.0/24"
 
 NAME="k8s.$1"
-IMAGE="gcr.io/google_containers/hyperkube-amd64:v1.5.2"
+IMAGE="gcr.io/google_containers/hyperkube-amd64:v1.6.0"
 ETCD_SERVERS="http://127.0.0.1:4001"
 
 RESTART="no"
@@ -47,7 +47,7 @@ case "$1" in
 		--restart $RESTART \
 		--net host \
 		$IMAGE /hyperkube apiserver \
-			--insecure-bind-address=$MASTER \
+			--insecure-bind-address=0.0.0.0 \
 			--external-hostname=$MASTER \
 			--bind-address=$MASTER \
 			--secure-port=0 \
@@ -122,8 +122,14 @@ case "$1" in
 
 	NODE_IP="$2"
 
+	if [ "$NODE_IP" == "" ]; then
+		echo "NODE_IP is missing"
+		exit 1
+	fi
+
 	./bin/hyperkube kubelet \
 			--api_servers=http://$MASTER:8080 \
+			--hostname-override $NODE_IP
 			--address=0.0.0.0 \
 			--node-ip $NODE_IP \
 			--enable-server \
