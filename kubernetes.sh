@@ -6,7 +6,7 @@ NODEIP="127.0.0.1"
 SERVICERANGE="172.18.0.0/24"
 
 NAME="k8s.$1"
-IMAGE="gcr.io/google_containers/hyperkube-amd64:v1.7.5"
+IMAGE="gcr.io/google_containers/hyperkube-amd64:v1.7.6"
 ETCD_SERVERS="http://127.0.0.1:4001"
 
 RESTART="no"
