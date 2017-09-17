@@ -3,7 +3,7 @@
 # https://coreos.com/etcd/docs/latest/clustering.html#static
 # https://coreos.com/etcd/docs/latest/docker_guide.html
 
-ETCD_IMAGE="quay.io/coreos/etcd:v3.1.2"
+ETCD_IMAGE="quay.io/coreos/etcd:latest"
 ETCD_NAME="0"
 ETCD_LISTEN_IP="0.0.0.0"
 ETCD_ADVERTISE_IP="127.0.0.1"
@@ -34,7 +34,7 @@ docker stop etcd && docker rm etcd
 docker run \
 	--name etcd \
 	--detach \
-	--restart always \
+	--restart no \
 	--volumes-from data_etcd \
 	-p 2380:2380 \
 	-p 4001:4001 \

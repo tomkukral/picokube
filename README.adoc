@@ -1,6 +1,8 @@
-= Kubernetes demo
+= Picokube
 
-These scripts can be used for quick bootstrapping of Kubernetes and Etcd cluster. Predefined values are prepared for running on localhost but it can be easily changed to multi node scenario.
+Minimalized version of Kubernetes. Components (except kubelet) are running containerized so you don't need any more VMs.
+
+These scripts can be used for quick bootstrapping of Kubernetes and Etcd. Predefined values are prepared for running on localhost but it can be easily changed to multi node scenario.
 
 
 == Configuration variables
@@ -12,7 +14,7 @@ These scripts can be used for quick bootstrapping of Kubernetes and Etcd cluster
 |Description
 
 | `ETCD_IMAGE`
-| `quay.io/coreos/etcd:v3.1.2`
+| `quay.io/coreos/etcd:latest`
 | etcd is running from this image
 
 | `ETCD_NAME`
@@ -40,7 +42,7 @@ These scripts can be used for quick bootstrapping of Kubernetes and Etcd cluster
 | IP range used for Kubernetes services
 
 | `IMAGE`
-| `gcr.io/google_containers/hyperkube-amd64:v1.5.2`
+| `gcr.io/google_containers/hyperkube-amd64:v1.7.6`
 | Kubernetes components are using this image
 
 | `ETCD_SERVERS`
