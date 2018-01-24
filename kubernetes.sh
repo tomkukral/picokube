@@ -136,6 +136,7 @@ case "$1" in
 			--node-ip $NODE_IP \
 			--cgroup-driver=systemd \
 			--enable-server \
+			--fail-swap-on=false \
 			--v=2
 	;;
 
