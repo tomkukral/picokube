@@ -42,7 +42,7 @@ These scripts can be used for quick bootstrapping of Kubernetes and Etcd. Predef
 | IP range used for Kubernetes services
 
 | `IMAGE`
-| `gcr.io/google_containers/hyperkube-amd64:v1.7.6`
+| `gcr.io/google_containers/hyperkube-amd64:v1.9.2`
 | Kubernetes components are using this image
 
 | `ETCD_SERVERS`
