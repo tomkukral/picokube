@@ -2,11 +2,11 @@
 
 # config
 MASTER="127.0.0.1"
-NODEIP="127.0.0.1"
+NODEIP="172.31.255.1"
 SERVICERANGE="172.18.0.0/24"
 
 NAME="k8s.$1"
-IMAGE="gcr.io/google_containers/hyperkube-amd64:v1.7.6"
+IMAGE="gcr.io/google_containers/hyperkube-amd64:v1.8.0"
 ETCD_SERVERS="http://127.0.0.1:4001"
 
 RESTART="no"
@@ -28,7 +28,7 @@ case "$1" in
 	[ ! -d bin ] && mkdir bin
 
 	docker run --rm -ti \
-		-v $PWD/bin/:/tmp/bin/ \
+		-v $PWD/bin/:/tmp/bin/:Z \
 		--entrypoint cp $IMAGE \
 		-- /hyperkube /tmp/bin/
 
@@ -127,11 +127,14 @@ case "$1" in
 		exit 1
 	fi
 
+	sed "s/{{ apiserver }}/$MASTER/g" kubeconfig > kubeconfig_edited
+
 	./bin/hyperkube kubelet \
-			--api_servers=http://$MASTER:8080 \
-			--hostname-override $NODE_IP
+			--kubeconfig kubeconfig_edited \
+			--hostname-override $NODE_IP \
 			--address=0.0.0.0 \
 			--node-ip $NODE_IP \
+			--cgroup-driver=systemd \
 			--enable-server \
 			--v=2
 	;;
