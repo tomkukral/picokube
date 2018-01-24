@@ -16,7 +16,7 @@ fi
 if [ "$1" == "get-binary" ]; then
 	[ ! -d bin ] && mkdir bin
 	docker run --rm -ti \
-		-v $PWD/bin/:/tmp/bin/ \
+		-v $PWD/bin/:/tmp/bin/:Z \
 		--entrypoint cp $ETCD_IMAGE \
 		-- /usr/local/bin/{etcd,etcdctl} /tmp/bin/
 	./bin/etcd --version
